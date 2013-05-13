@@ -89,6 +89,44 @@
               <show_in_website>1</show_in_website>
               <show_in_store>0</show_in_store>
             </parcel_type>
+			
+			<valormin translate="label">
+			  <label>Valor Mínimo da Parcela</label>
+			  <frontend_type>text</frontend_type>
+			  <sort_order>20</sort_order>
+			  <show_in_default>1</show_in_default>
+			  <show_in_website>1</show_in_website>
+			  <show_in_store>1</show_in_store>
+		    </valormin>
+			
+		    <nummax translate="label">
+			  <label>Número Máximo de Parcelas</label>
+			  <frontend_type>text</frontend_type>
+			  <sort_order>18</sort_order>
+			  <show_in_default>1</show_in_default>
+			  <show_in_website>1</show_in_website>
+			  <show_in_store>1</show_in_store>
+		    </nummax>
+			
+			<nummaxnojuros translate="label">
+			  <label>Número Máximo de Parcelas Sem Juros</label>
+			  <frontend_type>text</frontend_type>
+			  <sort_order>19</sort_order>
+			  <show_in_default>1</show_in_default>
+			  <show_in_website>1</show_in_website>
+			  <show_in_store>1</show_in_store>
+		    </nummax>
+			
+		    <juros translate="label">
+  			  <label>Juros das parcelas</label>
+			  <frontend_type>text</frontend_type>
+			  <sort_order>25</sort_order>
+			  <show_in_default>1</show_in_default>
+			  <show_in_website>1</show_in_website>
+			  <show_in_store>1</show_in_store>
+			  <comment>Deixe vazio para desabilitar os juros sobre parcelas. Utilize ponto para número decimal.</comment>
+		    </juros>
+
           </fields>
         </cielobuyloja>
       </groups>

@@ -4,7 +4,7 @@ class Locaweb_RedeCardWS_Model_Transaction extends Locaweb_Abstract_Model_Paymen
 {
   protected $_code = 'redecardws';
   protected $_formBlockType = 'redecardws/form_cc';
-  protected $_canSaveCc = false;
+  protected $_canSaveCc = true;
   protected $_canCapture = true;
 
   public function capture(Varien_Object $payment, $amount)

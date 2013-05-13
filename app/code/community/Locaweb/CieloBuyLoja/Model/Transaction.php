@@ -4,8 +4,30 @@ class Locaweb_CieloBuyLoja_Model_Transaction extends Locaweb_Abstract_Model_Paym
 {
   protected $_code = 'cielobuyloja';
   protected $_formBlockType = 'cielobuyloja/form_cc';
-  protected $_canSaveCc = false;
+  protected $_canSaveCc = true;
   protected $_canCapture = true;
+  
+  public function assignData($data)
+  {
+    if (!($data instanceof Varien_Object)) {
+        $data = new Varien_Object($data);
+    }
+    $info = $this->getInfoInstance();
+    $additionaldata = array('cc_parcelas' => $data->getCcParcelas());
+    $info->setAdditionalData(serialize($additionaldata));
+    $info->setCcType($data->getCcType())
+        ->setCcOwner($data->getCcOwner())
+        ->setCcLast4(substr($data->getCcNumber(), -4))
+        ->setCcNumber($data->getCcNumber())
+        ->setCcCid($data->getCcCid())
+        ->setCcExpMonth($data->getCcExpMonth())
+        ->setCcExpYear($data->getCcExpYear())
+        ->setCcSsIssue($data->getCcSsIssue())
+        ->setCcSsStartMonth($data->getCcSsStartMonth())
+        ->setCcSsStartYear($data->getCcSsStartYear())
+        ;
+    return $this;
+  }
 
   public function capture(Varien_Object $payment, $amount)
   {

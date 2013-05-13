@@ -40,7 +40,8 @@ class Locaweb_Abstract_Model_Payment_Method_Cc extends Mage_Payment_Model_Method
     $payment_cc_number      = $payment->getCcNumber();
     $payment_cc_cvv         = $payment->getCcCid();
     $payment_cc_due_date    = $this->_formatCcExpiration($payment->getCcExpMonth(), $payment->getCcExpYear());
-    $payment_parcels        = $this->getConfigData('parcel_number');
+    $additionaldata         = unserialize($payment->getData('additional_data'));
+    $payment_parcels        = $additionaldata['cc_parcelas'];
     $payment_operation_type = $this->getConfigData('parcel_type');
     $buyer_document         = $order->getCustomerTaxvat();
     $buyer_name             = $this->_formatCustomerName($billingaddress->getData('firstname'), $billingaddress->getData('lastname'));
@@ -49,7 +50,7 @@ class Locaweb_Abstract_Model_Payment_Method_Cc extends Mage_Payment_Model_Method
     $buyer_city             = $billingaddress->city;
     $buyer_state            = $billingaddress->region;
     $return_uri             = 'http://locaweb.com.br'; #FIXME: Para Cielo Buy Loja sem autenticacao e Redecard Web Service essa url de retorno não será chamada. Porém em versões futuras será chamada pelo Cielo buy Page Cielo.
-
+    
     $params = array(
       'url_retorno' => $return_uri,
       'capturar'    => 'true',

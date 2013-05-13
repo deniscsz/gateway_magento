@@ -25,19 +25,84 @@
  */
 ?>
 <?php $_code=$this->getMethodCode() ?>
+
+<script type="text/javascript">
+
+function onCardChange(selectElement) {
+    /*var meuID = optElement.id;
+    var selCard = optElement.value; 
+    
+    if (selCard == 'diners') {
+        $('<?php echo $_code ?>_cc_number').setAttribute('maxlength', 14);
+    }
+    else {
+        if (selCard == 'amex') {
+            $('<?php echo $_code ?>_cc_number').setAttribute('maxlength', 15);
+        }
+        else {
+            $('<?php echo $_code ?>_cc_number').setAttribute('maxlength', 16);
+        }
+    }
+
+    //quando um tipo de cartao e escolhida, limpa a escolha dos outros campos de tipo de cartao
+    $('<?php echo $_code ?>_cc_number').value = "";
+    $('<?php echo $_code ?>_cc_cid').value = "";*/
+    
+    var selCard = selectElement.options[selectElement.selectedIndex].value;
+    //alert(selCard);
+
+    if (selCard == 'DIN') {
+        $('<?php echo $_code ?>_cc_number').setAttribute('maxlength', 14);
+    }
+    else {
+        if (selCard == 'AME') {
+            $('<?php echo $_code ?>_cc_number').setAttribute('maxlength', 15);
+        }
+        else {
+            $('<?php echo $_code ?>_cc_number').setAttribute('maxlength', 16);
+        }
+    }
+
+    //quando um tipo de cartao e escolhida, limpa a escolha dos outros campos de tipo de cartao
+    var results = $$('select');
+    results.each(function(elem){
+        if (selectElement != elem && elem.id.indexOf('cc_type') > 0) {
+            elem.value = '';
+        }
+    });
+    
+    $('<?php echo $_code ?>_cc_number').value = "";
+    $('<?php echo $_code ?>_cc_cid').value = "";
+}
+
+function numeros(v) {
+    v=v.replace(/\D/g,"");
+    return v;
+}
+function execmascara() {
+    v_obj.value=v_fun(v_obj.value);
+}
+function mascara(o,f) {
+    v_obj=o;
+    v_fun=f;
+    setTimeout("execmascara()",1);
+}
+
+</script>
+
 <ul class="form-list" id="payment_form_<?php echo $_code ?>" style="display:none;">
 <?php /*
     <li>
         <div class="input-box">
-            <label for="<?php echo $_code ?>_cc_owner" class="required"><em>*</em><?php echo $this->__('Name on Card') ?></label>
+            <label for="<?php echo $_code ?>_cc_owner" class="required"><?php echo $this->__('Name on Card') ?><sup>*</sup></label>
             <input type="text" title="<?php echo $this->__('Name on Card') ?>" class="input-text required-entry" id="<?php echo $_code ?>_cc_owner" name="payment[cc_owner]" value="<?php echo $this->htmlEscape($this->getInfoData('cc_owner')) ?>" />
         </div>
     </li>
 */ ?>
     <li>
-        <label for="<?php echo $_code ?>_cc_type" class="required"><em>*</em><?php echo $this->__('Credit Card Type') ?></label>
+        <label for="<?php echo $_code ?>_cc_type" class="required"><?php echo $this->__('Credit Card Type') ?><sup>*</sup></label>
         <div class="input-box">
-            <select id="<?php echo $_code ?>_cc_type" name="payment[cc_type]" class="required-entry">
+            <select id="<?php echo $_code ?>_cc_type" name="payment[cc_type]" class="required-entry" onChange="javascript:onCardChange(this)">
                 <option value=""><?php echo $this->__('--Please Select--')?></option>
             <?php $_ccType = $this->getInfoData('cc_type') ?>
             <?php foreach ($this->getCcAvailableTypes() as $_typeCode => $_typeName): ?>
@@ -47,13 +112,13 @@
         </div>
     </li>
     <li>
-        <label for="<?php echo $_code ?>_cc_number" class="required"><em>*</em><?php echo $this->__('Credit Card Number') ?></label>
+        <label for="<?php echo $_code ?>_cc_number" class="required"><?php echo $this->__('Credit Card Number') ?><sup>*</sup></label>
         <div class="input-box">
-            <input type="text" id="<?php echo $_code ?>_cc_number" name="payment[cc_number]" title="<?php echo $this->__('Credit Card Number') ?>" class="input-text" value="" />
+            <input type="text" id="<?php echo $_code ?>_cc_number" name="payment[cc_number]" onkeyup="mascara(this,numeros)" onfocus="mascara(this,numeros)" onblur="mascara(this,numeros)" title="<?php echo $this->__('Credit Card Number') ?>" class="input-text required-entry" value="" />
         </div>
     </li>
     <li id="<?php echo $_code ?>_cc_type_exp_div">
-        <label for="<?php echo $_code ?>_expiration" class="required"><em>*</em><?php echo $this->__('Expiration Date') ?></label>
+        <label for="<?php echo $_code ?>_expiration" class="required"><?php echo $this->__('Expiration Date') ?><sup>*</sup></label>
         <div class="input-box">
             <div class="v-fix">
                 <select id="<?php echo $_code ?>_expiration" name="payment[cc_exp_month]" class="month validate-cc-exp required-entry">
@@ -76,20 +141,31 @@
     <?php echo $this->getChildHtml() ?>
     <?php if($this->hasVerification()): ?>
     <li id="<?php echo $_code ?>_cc_type_cvv_div">
-        <label for="<?php echo $_code ?>_cc_cid" class="required"><em>*</em><?php echo $this->__('Card Verification Number') ?></label>
+        <label for="<?php echo $_code ?>_cc_cid" class="required"><?php echo $this->__('Card Verification Number') ?><sup>*</sup></label>
         <div class="input-box">
             <div class="v-fix">
-                <input type="text" title="<?php echo $this->__('Card Verification Number') ?>" class="input-text cvv required-entry" id="<?php echo $_code ?>_cc_cid" name="payment[cc_cid]" value="" />
+                <input type="text" title="<?php echo $this->__('Card Verification Number') ?>" class="input-text cvv required-entry" id="<?php echo $_code ?>_cc_cid" name="payment[cc_cid]" value="" maxlength="3" onkeyup="mascara(this,numeros)" onfocus="mascara(this,numeros)" onblur="mascara(this,numeros)" />
             </div>
             <a href="#" class="cvv-what-is-this"><?php echo $this->__('What is this?') ?></a>
         </div>
     </li>
     <?php endif; ?>
 
+    <li>
+        <label for="<?php echo $_code ?>_cc_parcelas"><?php echo $this->__('Parcelas') ?><sup>*</sup></label><br />
+        <div class="input-box">
+            <select id="<?php echo $_code ?>_cc_parcelas" name="payment[cc_parcelas]" style="width: 230px;">
+		<?php foreach($this->getParcelas() as $parcela): ?>
+				<option value="<?php echo $parcela['parcela'] ?>"><?php echo $parcela['label'] ?></option>
+		<?php endforeach ?>
+	    </select>
+        </div>
+    </li>
+
     <?php if ($this->hasSsCardType()): ?>
     <li id="<?php echo $_code ?>_cc_type_ss_div">
         <ul class="inner-form">
-            <li class="form-alt"><label for="<?php echo $_code ?>_cc_issue" class="required"><em>*</em><?php echo $this->__('Switch/Solo/Maestro Only') ?></label></li>
+            <li class="form-alt"><label for="<?php echo $_code ?>_cc_issue" class="required"><?php echo $this->__('Switch/Solo/Maestro Only') ?><sup>*</sup></label></li>
             <li>
                 <label for="<?php echo $_code ?>_cc_issue"><?php echo $this->__('Issue Number') ?>:</label>
                 <span class="input-box">
@@ -116,6 +192,7 @@
                     </div>
                 </div>
             </li>
+            
             <li class="adv-container">&nbsp;</li>
         </ul>
         <script type="text/javascript">
